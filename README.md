@@ -32,7 +32,7 @@ COUPS = [  {:item=>"AVOCADO", :num=>2, :cost=>5.00},
      {:item=>"CHEESE", :num=>3, :cost=>15.00}]
 
 #randomly generates a cart of items
-def generateCart
+def generate_cart
  cart = []
  rand(20).times do
    cart.push(ITEMS.sample)
@@ -41,7 +41,7 @@ def generateCart
 end
 
 #randomly generates set of coupons
-def generateCoups
+def generate_coups
  coups = []
  rand(2).times do
    coups.push(COUPS.sample)
@@ -51,15 +51,46 @@ end
 
 ```
 
-#the cart is currently an array of individual items, translate it into a hash that includes the counts for each item
-  For example if your cart was [  {"AVOCADO" => {:price => 3.00, :clearance => true}}, {"AVOCADO" => {:price => 3.00, :clearance => true}}]
-  it would become {"AVOCADO" => {:price => 3.00, :clearance => true}, :count => 2}
-##create a checkout method that calculates the total cost of the cart
-##when checking out, check the coupons and apply the discount if the proper number of items is present
-##if any of the items are on clearance add a 20% discount
-##if the customer has 2 of the same coupon, triple the discount
-##if none of the items purchased have a unit price greater than 5$ give the customer a 10$ discount off the whole cart
+The cart is currently an array of individual items. Translate it into a hash that includes the counts for each item.
 
+For example if your cart was:
+``` ruby 
+[
+	{
+		"AVOCADO" => {
+			:price => 3.00, 
+			:clearance => true
+		}
+	}, 
+	{ 
+		"AVOCADO" => {
+			:price => 3.00, 
+			:clearance => true
+		}
+	}
+]
+```
 
-##Reward
+...becomes: 
+
+``` ruby 
+{
+	"AVOCADO" => {
+		:price => 3.00, 
+		:clearance => true
+	}, 
+	:count => 2
+}
+```
+
+### The `checkout` method
+
+Create a `checkout` method that calculates the total cost of the cart.
+When checking out, check the coupons and apply the discount if the proper number of items is present.
+
+If any of the items are on clearance add a 20% discount.
+If the customer has 2 of the same coupon, triple the discount.
+If none of the items purchased have a unit price greater than $5 give the customer a 10$ discount off the whole cart
+
+#Reward
 https://www.youtube.com/watch?v=-RuSCACXmXs
