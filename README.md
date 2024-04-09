@@ -23,13 +23,13 @@ The cart starts as an array of individual items. Translate it into a hash that i
 
 Create a `checkout` method that calculates the total cost of the consolidated cart.
 
-When checking out, check the coupons and apply the discount if the proper number of items is present.
+When checking out 
 
-* If any of the items are on clearance add a 20% discount.
+* Apply coupon discounts if the proper number of items are present
 
-* If the customer has 2 of the same coupon, triple the discount.
+* Apply 20% discount if items are on clearance
 
-* If none of the items purchased have a unit price greater than $5 give the customer a 10$ discount off the whole cart
+* If cart's total is over $100, apply 10% discount. Apply coupons first, then check total.
 
 #Reward
 https://www.youtube.com/watch?v=-RuSCACXmXs

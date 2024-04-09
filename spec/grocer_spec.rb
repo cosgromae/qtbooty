@@ -50,12 +50,19 @@ describe "Grocer" do
   end
 
   describe "checkout" do
+
+    it "consolidates cart before calculation" do
+      beets = items.find { |item| item['BEETS'] }
+      cart = [beets]
+      expect(self).to receive(consolidate_cart) { cart }
+      expect(checkout(cart: cart, coupons: [])).to eq(2.50)
+    end
+
     it "adds 20% discount to items currently on clearance" do
       # Clearance item
       pb = items.find { |item| item['PEANUTBUTTER'] }
       cart = [pb]
-      result = consolidate_cart(cart)
-      total_cost = checkout(cart: result, coupons: [])
+      total_cost = checkout(cart: cart, coupons: [])
 
       expect(total_cost).to eq(2.80)
     end
@@ -66,21 +73,39 @@ describe "Grocer" do
       
       avocado_coupon = coupons.find {|coupon| coupon[:item] == "AVOCADO" }
       coupons = [avocado_coupon]
-
-    end
-
-    it "triples discount if 2 coupons present" do
-      avocado = items.find { |item| item['AVOCADO'] }
-      cart = [avocado, avocado]
-      avocado_coupon = coupons.find {|coupon| coupon[:item] == "AVOCADO" }
-      coupons = [avocado_coupon, avocado_coupon]
+      expect(checkout(cart: cart, coupons: coupons)).to eq(5.00)
     end
 
     it "charges full price for items that fall outside of coupon count" do
       beer = items.find { |item| item['BEER'] }
       cart = [beer, beer, beer]
+
+      beer_coupon = coupons.find {|coupon| coupon[:item] == "BEER" }
+      coupons = [beer_coupon]
+
+      expect(checkout(cart: cart, coupons: coupons)).to eq(33.00)
+    end
+
+
+    it "only applies coupons that meet minimum amount" do
+      beer = items.find { |item| item['BEER'] }
+      cart = [beer, beer, beer]
+
       beer_coupon = coupons.find {|coupon| coupon[:item] == "BEER" }
       coupons = [beer_coupon, beer_coupon]
+
+      expect(checkout(cart: cart, coupons: coupons)).to eq(33.00)
+    end
+
+    it "applies 10% discount if cart over $100" do
+      beer = items.find { |item| item['BEER'] }
+      cart = []
+      
+      10.times { cart << beer }
+      
+      result = consolidate_cart(cart)
+
+      expect(checkout(result)).to eq(130.00)
     end
   end
 end
