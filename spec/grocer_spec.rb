@@ -32,7 +32,7 @@ describe "Grocer" do
       kale = items.find { |item| item['KALE'] }
       cart = [avocado, avocado, kale]
 
-      result = consolidate_cart(cart)
+      result = consolidate_cart(cart: cart)
 
       expected_consolidated_cart = {
           "AVOCADO" => {
@@ -51,12 +51,15 @@ describe "Grocer" do
   end
 
   describe "checkout" do
+    describe "using the consolidate_cart method during checkout" do
+      it "consolidates cart before calculation" do
+        beets = items.find { |item| item['BEETS'] }
+        cart = [beets]
+        result = consolidate_cart(cart: cart)
 
-    it "consolidates cart before calculation" do
-      beets = items.find { |item| item['BEETS'] }
-      cart = [beets]
-      expect(self).to receive(consolidate_cart) { cart }
-      expect(checkout(cart: cart, coupons: [])).to eq(2.50)
+        expect(self).to receive(:consolidate_cart).with(cart: cart).and_return(result)
+        expect(checkout(cart: cart, coupons: [])).to eq(2.50)
+      end
     end
 
     it "adds 20% discount to items currently on clearance" do
@@ -65,7 +68,7 @@ describe "Grocer" do
       cart = [pb]
       total_cost = checkout(cart: cart, coupons: [])
 
-      expect(total_cost).to eq(2.80)
+      expect(total_cost).to eq(2.40)
     end
 
     it "considers coupons" do
