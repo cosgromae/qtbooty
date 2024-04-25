@@ -72,12 +72,23 @@ describe "Grocer" do
     end
 
     it "considers coupons" do
+      cheese = items.find { |item| item['CHEESE'] }
+      cart = [cheese, cheese, cheese]
+      
+      cheese_coupon = coupons.find {|coupon| coupon[:item] == "CHEESE" }
+      coupons = [cheese_coupon]
+
+      expect(checkout(cart: cart, coupons: coupons)).to eq(15.00)
+    end
+
+    it "considers coupons and clearance discounts" do
       avocado = items.find { |item| item['AVOCADO'] }
       cart = [avocado, avocado]
       
       avocado_coupon = coupons.find {|coupon| coupon[:item] == "AVOCADO" }
       coupons = [avocado_coupon]
-      expect(checkout(cart: cart, coupons: coupons)).to eq(5.00)
+
+      expect(checkout(cart: cart, coupons: coupons)).to eq(4.00)
     end
 
     it "charges full price for items that fall outside of coupon count" do
@@ -106,28 +117,8 @@ describe "Grocer" do
       cart = []
       
       10.times { cart << beer }
-      
-      result = consolidate_cart(cart)
 
-      expect(checkout(result)).to eq(130.00)
+      expect(checkout(cart: cart, coupons: [])).to eq(117.00)
     end
   end
 end
-
-#randomly generates a cart of items
-# def generate_cart
-#  cart = []
-#  rand(20).times do
-#    cart.push(ITEMS.sample)
-#  end
-#  cart
-# end
-
-# #randomly generates set of coupons
-# def generate_coups
-#  coups = []
-#  rand(2).times do
-#    coups.push(COUPS.sample)
-#  end
-#  coups
-# end
