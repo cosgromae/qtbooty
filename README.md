@@ -1,6 +1,6 @@
 ---
 languages: ruby
-tags: collections, arrays, hashes
+tags: collections, arrays, hashes, named parameters
 ---
 
 ##Objectives: 
@@ -9,7 +9,7 @@ Create a checkout method to calculate the total cost of a cart of items and appl
 Dr. Steve Bruhle, your green grocer, isn't ready, but you are!
 
 ##Skills: 
-any?, all?, none?, each, map/collect
+any?, all?, none?, each, map/collect, named parameters
 
 ##Instructions:
 
@@ -30,6 +30,15 @@ When checking out
 * Apply 20% discount if items are on clearance
 
 * If cart's total is over $100, apply 10% discount. Apply coupons first, then check total.
+
+
+### Named Parameters
+
+The method signature for the checkout method is 
+`consolidate_cart(cart:[])`. This, along with the checkout method uses a ruby 2.0 feature called [Named Parameters](http://brainspec.com/blog/2012/10/08/keyword-arguments-ruby-2-0/).
+
+Named parameters give you more expressive code since you are specifying what each parameter is for. Another benefit is the order you pass your parameters doesn't matter!
+`checkout(cart: [], coupons: [])` is the same as `checkout(coupons: [], cart: [])`
 
 #Reward
 https://www.youtube.com/watch?v=-RuSCACXmXs
