@@ -1,4 +1,5 @@
 require_relative 'grocer'
+
 def items
 	[
 		{"AVOCADO" => {:price => 3.00, :clearance => true}},

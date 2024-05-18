@@ -1,6 +1,3 @@
-require 'spec_helper'
-require_relative '../grocer.rb'
-
 describe "Grocer" do
   let(:items) do
     [
