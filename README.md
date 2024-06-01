@@ -40,5 +40,5 @@ The method signature for the checkout method is
 Named parameters give you more expressive code since you are specifying what each parameter is for. Another benefit is the order you pass your parameters doesn't matter!
 `checkout(cart: [], coupons: [])` is the same as `checkout(coupons: [], cart: [])`
 
-#Reward
-https://www.youtube.com/watch?v=-RuSCACXmXs
+## Reward
+* [Dr. Brule](https://www.youtube.com/watch?v=-RuSCACXmXs)
