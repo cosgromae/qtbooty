@@ -41,4 +41,4 @@ Named parameters give you more expressive code since you are specifying what eac
 `checkout(cart: [], coupons: [])` is the same as `checkout(coupons: [], cart: [])`
 
 ## Reward
-* [Dr. Brule](https://www.youtube.com/watch?v=-RuSCACXmXs)
+* [Dr. Brule](http://www.adultswim.com/videos/tim-and-eric-awesome-show-great-job/dr-brule-your-green-grocer/)
