@@ -54,32 +54,6 @@ describe "Grocer" do
     end
   end
 
-  describe "#apply_clearance" do
-    it "takes 20% off price if the item is on clearance" do
-      tempeh = items.find { |item| item['TEMPEH'] }
-      cart = [tempeh]
-      consolidated_cart = consolidate_cart(cart: cart)
-
-      result = apply_clearance(cart: consolidated_cart)
-      expect(result["TEMPEH"][:price]).to eq(2.40)
-    end
-
-    it "does not discount the price for items not on clearance" do
-      avocado = items.find { |item| item['AVOCADO'] }
-      tempeh = items.find { |item| item['TEMPEH'] }
-      beets = items.find { |item| item['BEETS'] }
-      milk = items.find { |item| item['SOY MILK'] }
-      cart = [avocado, tempeh, beets, milk]
-      consolidated_cart = consolidate_cart(cart: cart)
-
-      result = apply_clearance(cart: consolidated_cart)
-      clearance_prices = {"AVOCADO" => 2.40, "TEMPEH" => 2.40, "BEETS" => 2.50, "SOY MILK" => 3.60}
-      result.each do |name, properties|
-        expect(properties[:price]).to eq(clearance_prices[name])
-      end
-    end
-  end
-
   describe "#apply_coupons" do
     context "base case - with perfect coupon (number of items identical):" do
       before(:each) do
@@ -106,6 +80,10 @@ describe "Grocer" do
         expect(@avocado_result["AVOCADO"][:price]).to eq(3.00)
         expect(@avocado_result["AVOCADO"][:count]).to eq(0)
       end
+
+      it "remembers if the item was on clearance" do
+        expect(@avocado_result["AVOCADO W/COUPON"][:clearance]).to eq(true)
+      end
     end
 
     context "more advanced cases:" do
@@ -122,6 +100,7 @@ describe "Grocer" do
         expect(cheese_result["CHEESE"][:count]).to eq(2)
         expect(cheese_result["CHEESE W/COUPON"][:price]).to eq(15.00)
         expect(cheese_result["CHEESE W/COUPON"][:count]).to eq(1)
+        expect(cheese_result["CHEESE W/COUPON"][:clearance]).to eq(false)
       end
 
       it "doesn't break if the coupon doesn't apply to any items" do 
@@ -153,8 +132,10 @@ describe "Grocer" do
         expect(multiple_coupons["AVOCADO"][:price]).to eq(3.00)
         expect(multiple_coupons["CHEESE W/COUPON"][:price]).to eq(15.00)
         expect(multiple_coupons["CHEESE W/COUPON"][:count]).to eq(1)
+        expect(multiple_coupons["CHEESE W/COUPON"][:clearance]).to eq(false)
         expect(multiple_coupons["AVOCADO W/COUPON"][:price]).to eq(5.00)
         expect(multiple_coupons["AVOCADO W/COUPON"][:count]).to eq(1)
+        expect(multiple_coupons["AVOCADO W/COUPON"][:clearance]).to eq(true)
       end
 
       it "doesn't break if there is no coupon" do
@@ -168,6 +149,32 @@ describe "Grocer" do
     end
   end
 
+  describe "#apply_clearance" do
+    it "takes 20% off price if the item is on clearance" do
+      tempeh = items.find { |item| item['TEMPEH'] }
+      cart = [tempeh]
+      consolidated_cart = consolidate_cart(cart: cart)
+
+      result = apply_clearance(cart: consolidated_cart)
+      expect(result["TEMPEH"][:price]).to eq(2.40)
+    end
+
+    it "does not discount the price for items not on clearance" do
+      avocado = items.find { |item| item['AVOCADO'] }
+      tempeh = items.find { |item| item['TEMPEH'] }
+      beets = items.find { |item| item['BEETS'] }
+      milk = items.find { |item| item['SOY MILK'] }
+      cart = [avocado, tempeh, beets, milk]
+      consolidated_cart = consolidate_cart(cart: cart)
+
+      result = apply_clearance(cart: consolidated_cart)
+      clearance_prices = {"AVOCADO" => 2.40, "TEMPEH" => 2.40, "BEETS" => 2.50, "SOY MILK" => 3.60}
+      result.each do |name, properties|
+        expect(properties[:price]).to eq(clearance_prices[name])
+      end
+    end
+  end
+  
   describe "#checkout" do
 
     describe "base case (no clearance, no coupons)" do 
@@ -218,7 +225,7 @@ describe "Grocer" do
       end
     end
 
-    describe "coupons" do
+    describe "coupons:" do
       it "considers coupons" do
         cheese = items.find { |item| item['CHEESE'] }
         cart = [cheese, cheese, cheese]
@@ -260,7 +267,7 @@ describe "Grocer" do
       end
     end
 
-    describe "10% discount if total > 100" do
+    describe "discount of ten percent" do
       it "applies 10% discount if cart over $100" do
         beer = items.find { |item| item['BEER'] }
         cart = []
