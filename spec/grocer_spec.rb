@@ -24,11 +24,7 @@ describe "Grocer" do
 
   describe "#consolidate_cart" do
     it "adds a count of one to each item when there are no duplicates" do
-      tempeh = items.find { |item| item['TEMPEH'] }
-      butter = items.find { |item| item['PEANUTBUTTER'] }
-      almonds = items.find { |item| item['ALMONDS'] }
-      cart = [tempeh, butter, almonds]
-
+      cart = [find_item('TEMPEH'), find_item('PEANUTBUTTER'), find_item('ALMONDS')]
       result = consolidate_cart(cart: cart)
       result.each do |item, attributes|
         expect(attributes.keys).to include(:count)
@@ -37,10 +33,8 @@ describe "Grocer" do
     end
 
     it "increments count when there are multiple items" do
-      # items comes from the rspec "let" above.
-      avocado = items.find { |item| item['AVOCADO'] }
-      kale = items.find { |item| item['KALE'] }
-      cart = [avocado, avocado, kale]
+      avocado = find_item('AVOCADO')
+      cart = [avocado, avocado, find_item('KALE')]
 
       result = consolidate_cart(cart: cart)
 
@@ -57,7 +51,7 @@ describe "Grocer" do
   describe "#apply_coupons" do
     context "base case - with perfect coupon (number of items identical):" do
       before(:each) do
-        avocado = items.find { |item| item['AVOCADO'] }
+        avocado = find_item('AVOCADO')
         avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
         cart = [avocado, avocado]
         consolidated_cart = consolidate_cart(cart: cart)
@@ -89,10 +83,10 @@ describe "Grocer" do
     context "more advanced cases:" do
 
       it "accounts for when there are more items than the coupon allows" do
-        cheese = items.find { |item| item['CHEESE'] }
-        cart = [cheese, cheese, cheese, cheese, cheese]
+        cheese = find_item('CHEESE')
+        cart = Array.new(5, cheese)
         consolidated_cart = consolidate_cart(cart: cart)
-        cheese_coupon = coupons.find { |coupon| coupon[:item] == "CHEESE" }
+        cheese_coupon = find_coupon("CHEESE")
 
         cheese_result = apply_coupons(cart: consolidated_cart, coupons: [cheese_coupon])
         
@@ -104,26 +98,24 @@ describe "Grocer" do
       end
 
       it "doesn't break if the coupon doesn't apply to any items" do 
-        cheese = items.find { |item| item['CHEESE'] }
-        cart = [cheese, cheese]
+        cheese = find_item('CHEESE')
+        cart = Array.new(2, cheese)
         consolidated_cart = consolidate_cart(cart: cart)
-        avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
 
-        irrelevant_coupon_result = apply_coupons(cart: consolidated_cart, coupons: [avocado_coupon])
-        expect(irrelevant_coupon_result["CHEESE"][:price]).to eq(6.50)
-        expect(irrelevant_coupon_result["CHEESE"][:count]).to eq(2)  
-        expect(irrelevant_coupon_result.keys).to_not include("AVOCADO W/COUPON")
-        expect(irrelevant_coupon_result.keys).to_not include("AVOCADO")
+        irrelevant = apply_coupons(cart: consolidated_cart, coupons: [find_coupon("AVOCADO")])
+        expect(irrelevant["CHEESE"][:price]).to eq(6.50)
+        expect(irrelevant["CHEESE"][:count]).to eq(2)  
+        expect(irrelevant.keys).to_not include("AVOCADO W/COUPON")
+        expect(irrelevant.keys).to_not include("AVOCADO")
       end
 
       it "can apply multiple coupons" do
-        avocado = items.find { |item| item['AVOCADO'] }
-        cheese = items.find { |item| item['CHEESE'] }
-        cart = [cheese, cheese, cheese, cheese, avocado, avocado, avocado]
+        avocado = find_item('AVOCADO')
+        cheese = find_item('CHEESE')
+        cart = Array.new(4, cheese)
+        3.times { cart << avocado }
         consolidated_cart = consolidate_cart(cart: cart)
-        avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
-        cheese_coupon = coupons.find { |coupon| coupon[:item] == "CHEESE" }
-        coupons = [avocado_coupon, cheese_coupon]
+        coupons = [find_coupon("AVOCADO"), find_coupon("CHEESE")]
 
         multiple_coupons = apply_coupons(cart: consolidated_cart, coupons: coupons)
 
@@ -151,8 +143,7 @@ describe "Grocer" do
 
   describe "#apply_clearance" do
     it "takes 20% off price if the item is on clearance" do
-      tempeh = items.find { |item| item['TEMPEH'] }
-      cart = [tempeh]
+      cart = [find_item('TEMPEH')]
       consolidated_cart = consolidate_cart(cart: cart)
 
       result = apply_clearance(cart: consolidated_cart)
@@ -160,13 +151,8 @@ describe "Grocer" do
     end
 
     it "does not discount the price for items not on clearance" do
-      avocado = items.find { |item| item['AVOCADO'] }
-      tempeh = items.find { |item| item['TEMPEH'] }
-      beets = items.find { |item| item['BEETS'] }
-      milk = items.find { |item| item['SOY MILK'] }
-      cart = [avocado, tempeh, beets, milk]
+      cart = [find_item('AVOCADO'), find_item('TEMPEH'), find_item('BEETS'), find_item('SOY MILK')]
       consolidated_cart = consolidate_cart(cart: cart)
-
       result = apply_clearance(cart: consolidated_cart)
       clearance_prices = {"AVOCADO" => 2.40, "TEMPEH" => 2.40, "BEETS" => 2.50, "SOY MILK" => 3.60}
       result.each do |name, properties|
@@ -179,8 +165,7 @@ describe "Grocer" do
 
     describe "base case (no clearance, no coupons)" do 
       it "calls on #consolidate_cart before calculating the total for one item" do
-        beets = items.find { |item| item['BEETS'] }
-        cart = [beets]
+        cart = [find_item('BEETS')]
         result = consolidate_cart(cart: cart)
 
         expect(self).to receive(:consolidate_cart).with(cart: cart).and_return(result)
@@ -188,38 +173,30 @@ describe "Grocer" do
       end
 
       it "calls on #consolidate_cart before calculating the total for two different items" do
-        beets = items.find { |item| item['BEETS'] }
-        cheese = items.find { |item| item['CHEESE'] }
-        cart = [beets, cheese]
+        cart = [find_item('CHEESE'), find_item('BEETS')]
         result = consolidate_cart(cart: cart)
         expect(self).to receive(:consolidate_cart).with(cart: cart).and_return(result)
         expect(checkout(cart: cart, coupons: [])).to eq(9.00)
       end
 
       it "calls on #consolidate_cart before calculating the total for two identical items" do
-        beets = items.find { |item| item['BEETS'] }
-        cart = [beets, beets]
+        beets = find_item('BEETS')
+        cart = Array.new(2, beets)
         result = consolidate_cart(cart: cart)
         expect(self).to receive(:consolidate_cart).with(cart: cart).and_return(result)
         expect(checkout(cart: cart, coupons: [])).to eq(5.00)
       end
     end    
 
-    describe "clearance" do
+    describe "clearance:" do
       it "applies a 20% discount to items on clearance" do
-        # Clearance item
-        pb = items.find { |item| item['PEANUTBUTTER'] }
-        cart = [pb]
+        cart = [find_item('PEANUTBUTTER')]
         total_cost = checkout(cart: cart, coupons: [])
         expect(total_cost).to eq(2.40)
       end
 
       it "applies a 20% discount to items on clearance but not to non-clearance items" do
-        # Clearance item
-        beets = items.find { |item| item['BEETS'] }
-        pb = items.find { |item| item['PEANUTBUTTER'] }
-        cart = [pb, beets]
-
+        cart = [find_item("BEETS"), find_item("PEANUTBUTTER")]
         total_cost = checkout(cart: cart, coupons: [])
         expect(total_cost).to eq(4.90)
       end
@@ -227,53 +204,39 @@ describe "Grocer" do
 
     describe "coupons:" do
       it "considers coupons" do
-        cheese = items.find { |item| item['CHEESE'] }
-        cart = [cheese, cheese, cheese]
-
-        cheese_coupon = coupons.find { |coupon| coupon[:item] == "CHEESE" }
-        coupons = [cheese_coupon]
-
+        cheese = find_item('CHEESE')
+        cart = Array.new(3, cheese)
+        coupons = [find_coupon("CHEESE")]
         expect(checkout(cart: cart, coupons: coupons)).to eq(15.00)
       end
 
       it "considers coupons and clearance discounts" do
-        avocado = items.find { |item| item['AVOCADO'] }
-        cart = [avocado, avocado]
-
-        avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
-        coupons = [avocado_coupon]
-
+        avocado = find_item('AVOCADO')
+        cart = Array.new(2, avocado)
+        coupons = [find_coupon("AVOCADO")]
         expect(checkout(cart: cart, coupons: coupons)).to eq(4.00)
       end
 
       it "charges full price for items that fall outside of coupon count" do
-        beer = items.find { |item| item['BEER'] }
-        cart = [beer, beer, beer]
-
-        beer_coupon = coupons.find { |coupon| coupon[:item] == "BEER" }
-        coupons = [beer_coupon]
-
+        beer = find_item('BEER')
+        cart = Array.new(3, beer)
+        coupons = [find_coupon("BEER")]
         expect(checkout(cart: cart, coupons: coupons)).to eq(33.00)
       end
 
       it "only applies coupons that meet minimum amount" do
-        beer = items.find { |item| item['BEER'] }
-        cart = [beer, beer, beer]
-
-        beer_coupon = coupons.find { |coupon| coupon[:item] == "BEER" }
+        beer = find_item('BEER')
+        cart = Array.new(3, beer)
+        beer_coupon = find_coupon("BEER")
         coupons = [beer_coupon, beer_coupon]
-
         expect(checkout(cart: cart, coupons: coupons)).to eq(33.00)
       end
     end
 
     describe "discount of ten percent" do
       it "applies 10% discount if cart over $100" do
-        beer = items.find { |item| item['BEER'] }
-        cart = []
-
-        10.times { cart << beer }
-
+        beer = find_item('BEER')
+        cart = Array.new(10, beer)
         expect(checkout(cart: cart, coupons: [])).to eq(117.00)
       end
     end
