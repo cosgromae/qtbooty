@@ -10,7 +10,7 @@ Dr. Steve Bruhle, your green grocer, isn't ready, but you are!
 
 ## Instructions
 
-Implement a method `checkout` to calculate total cost of a cart of items and apply discounts and coupons as necessary.
+Implement a method `checkout` to calculate total cost of a cart of items and apply discounts and coupons as necessary. The checkout method will rely on the `consolidate_cart`, `apply_coupons`, and the `apply_clearance` methods.
 
 ### The `consolidate_cart` method
 
@@ -47,11 +47,40 @@ If the method is given a cart that looks like this:
 and a coupon for avocados that looks like this:
 
 ```ruby
-
+[{:item => "AVOCADO", :num => 2, :cost => 5.0}]
 
 ```
 
-### The 
+then #apply_coupons should return the following hash:
+
+```
+{
+  "AVOCADO" => {:price => 3.0, :clearance => true, :count => 1},
+  "KALE"    => {:price => 3.0, :clearance => false, :count => 1},
+  "AVOCADO W/COUPON" => {:price => 5.0, :clearance => true, :count => 1},
+}
+```
+
+### The `apply_clearance` method
+
+This method should discount the price of every item on clearance by twenty percent.
+
+For instance, if this method was given this cart:
+
+```ruby
+{
+  "PEANUTBUTTER" => {:price => 3.00, :clearance => true,  :count => 2},
+  "KALE"         => {:price => 3.00, :clearance => false, :count => 3}
+  "SOY MILK"     => {:price => 4.50, :clearance => true,  :count => 1}
+}
+```
+it should return a cart with clearance applied to peanutbutter and soy milk:
+
+{
+  "PEANUTBUTTER" => {:price => 2.40, :clearance => true,  :count => 2},
+  "KALE"         => {:price => 3.00, :clearance => false, :count => 3}
+  "SOY MILK"     => {:price => 3.60, :clearance => true,  :count => 1}
+}
 
 ### The `checkout` method
 
