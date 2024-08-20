@@ -50,8 +50,8 @@ describe "Grocer" do
   describe "#apply_coupons" do
     context "base case - with perfect coupon (number of items identical):" do
       before(:each) do
-        avocado = find_item('AVOCADO')
-        avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
+        @avocado = find_item('AVOCADO')
+        @avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
         cart = [avocado, avocado]
         consolidated_cart = consolidate_cart(cart: cart)
         @avocado_result = apply_coupons(cart: consolidated_cart, coupons: [avocado_coupon])
@@ -76,6 +76,17 @@ describe "Grocer" do
 
       it "remembers if the item was on clearance" do
         expect(@avocado_result["AVOCADO W/COUPON"][:clearance]).to eq(true)
+      end
+
+      it "can increment coupon count if two are applied" do
+        cart = [@avocado, @avocado, @avocado, @avocado, @avocado] # 5
+        coupons = [@avocado_coupon, @avocado_coupon] # 2
+        consolidated_cart = consolidate_cart(cart: cart)
+        two_coupon_result = apply_coupons(cart: consolidated_cart, coupons: coupons)
+        expect(@avocado_result["AVOCADO W/COUPON"][:count]).to eq(2)
+        expect(@avocado_result["AVOCADO W/COUPON"][:price]).to eq(5.00)
+        expect(@avocado_result["AVOCADO"][:price]).to eq(3.00)
+        expect(@avocado_result["AVOCADO"][:count]).to eq(1)
       end
     end
 
