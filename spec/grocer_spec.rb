@@ -52,9 +52,9 @@ describe "Grocer" do
       before(:each) do
         @avocado = find_item('AVOCADO')
         @avocado_coupon = coupons.find { |coupon| coupon[:item] == "AVOCADO" }
-        cart = [avocado, avocado]
-        consolidated_cart = consolidate_cart(cart: cart)
-        @avocado_result = apply_coupons(cart: consolidated_cart, coupons: [avocado_coupon])
+        @cart = [@avocado, @avocado]
+        @consolidated_cart = consolidate_cart(cart: @cart)
+        @avocado_result = apply_coupons(cart: @consolidated_cart, coupons: [@avocado_coupon])
       end
 
       it "adds a new key, value pair to the cart hash called 'ITEM NAME W/COUPON'" do
@@ -79,14 +79,12 @@ describe "Grocer" do
       end
 
       it "can increment coupon count if two are applied" do
-        cart = [@avocado, @avocado, @avocado, @avocado, @avocado] # 5
-        coupons = [@avocado_coupon, @avocado_coupon] # 2
-        consolidated_cart = consolidate_cart(cart: cart)
-        two_coupon_result = apply_coupons(cart: consolidated_cart, coupons: coupons)
-        expect(@avocado_result["AVOCADO W/COUPON"][:count]).to eq(2)
-        expect(@avocado_result["AVOCADO W/COUPON"][:price]).to eq(5.00)
-        expect(@avocado_result["AVOCADO"][:price]).to eq(3.00)
-        expect(@avocado_result["AVOCADO"][:count]).to eq(1)
+        consol_cart = consolidate_cart(cart: [@avocado, @avocado, @avocado, @avocado, @avocado])
+        two_coupon_result = apply_coupons(cart: consol_cart, coupons: [find_coupon("AVOCADO"), find_coupon("AVOCADO")])
+        expect(two_coupon_result["AVOCADO"][:count]).to eq(1)
+        expect(two_coupon_result["AVOCADO W/COUPON"][:price]).to eq(5.00)
+        expect(two_coupon_result["AVOCADO"][:price]).to eq(3.00)
+        expect(two_coupon_result["AVOCADO W/COUPON"][:count]).to eq(2)
       end
     end
 
