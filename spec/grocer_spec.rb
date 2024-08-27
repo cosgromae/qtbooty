@@ -78,14 +78,6 @@ describe "Grocer" do
         expect(@avocado_result["AVOCADO W/COUPON"][:clearance]).to eq(true)
       end
 
-      it "can increment coupon count if two are applied" do
-        consol_cart = consolidate_cart(cart: [@avocado, @avocado, @avocado, @avocado, @avocado])
-        two_coupon_result = apply_coupons(cart: consol_cart, coupons: [find_coupon("AVOCADO"), find_coupon("AVOCADO")])
-        expect(two_coupon_result["AVOCADO"][:count]).to eq(1)
-        expect(two_coupon_result["AVOCADO W/COUPON"][:price]).to eq(5.00)
-        expect(two_coupon_result["AVOCADO"][:price]).to eq(3.00)
-        expect(two_coupon_result["AVOCADO W/COUPON"][:count]).to eq(2)
-      end
     end
 
     context "more advanced cases:" do
@@ -145,6 +137,17 @@ describe "Grocer" do
         no_coupon_result = apply_coupons(cart: consolidated_cart, coupons: [])
         expect(no_coupon_result["CHEESE"][:price]).to eq(6.50)
         expect(no_coupon_result["CHEESE"][:count]).to eq(2)  
+      end
+
+      it "can increment coupon count if two are applied" do
+        avocado = find_item("AVOCADO")
+        coupon = find_coupon("AVOCADO")
+        consol_cart = consolidate_cart(cart: [avocado, avocado, avocado, avocado, avocado])
+        two_coupon_result = apply_coupons(cart: consol_cart, coupons: [coupon, coupon])
+        expect(two_coupon_result["AVOCADO"][:count]).to eq(1)
+        expect(two_coupon_result["AVOCADO W/COUPON"][:price]).to eq(5.00)
+        expect(two_coupon_result["AVOCADO"][:price]).to eq(3.00)
+        expect(two_coupon_result["AVOCADO W/COUPON"][:count]).to eq(2)
       end
     end
   end
