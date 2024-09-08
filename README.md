@@ -1,8 +1,3 @@
----
-languages: ruby
-tags: collections, arrays, hashes, named parameters, advanced
----
-
 ## Objectives
 Create a checkout method to calculate the total cost of a cart of items and apply discounts and coupons as necessary.
 
