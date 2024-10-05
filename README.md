@@ -109,3 +109,5 @@ Named parameters give you more expressive code since you are specifying what eac
 ## Reward
 
 * [Dr. Brule](http://www.adultswim.com/videos/tim-and-eric-awesome-show-great-job/dr-brule-your-green-grocer/)
+
+<a href='https://learn.co/lessons/green_grocer' data-visibility='hidden'>View this lesson on Learn.co</a>
