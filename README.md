@@ -42,7 +42,7 @@ If the method is given a cart that looks like this:
 and a coupon for avocados that looks like this:
 
 ```ruby
-[{:item => "AVOCADO", :num => 2, :cost => 5.0}]
+{:item => "AVOCADO", :num => 2, :cost => 5.0}
 
 ```
 
@@ -111,3 +111,5 @@ Named parameters give you more expressive code since you are specifying what eac
 * [Dr. Brule](http://www.adultswim.com/videos/tim-and-eric-awesome-show-great-job/dr-brule-your-green-grocer/)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer' title='Objectives'>Objectives</a> on Learn.co and start learning to code for free.</p>
+
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer'>Green Grocer</a> on Learn.co and start learning to code for free.</p>
