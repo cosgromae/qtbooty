@@ -96,7 +96,7 @@ When checking out, follow these steps *in order*:
 
 ### Named Parameters
 
-The method signature for the checkout method is 
+The method signature for the checkout method is
 `consolidate_cart(cart:[])`. This, along with the checkout method uses a ruby 2.0 feature called [Named Parameters](http://brainspec.com/blog/2012/10/08/keyword-arguments-ruby-2-0/).
 
 Named parameters give you more expressive code since you are specifying what each parameter is for. Another benefit is the order you pass your parameters doesn't matter!
@@ -109,7 +109,5 @@ Named parameters give you more expressive code since you are specifying what eac
 ## Reward
 
 * [Dr. Brule](http://www.adultswim.com/videos/tim-and-eric-awesome-show-great-job/dr-brule-your-green-grocer/)
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer' title='Objectives'>Objectives</a> on Learn.co and start learning to code for free.</p>
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer'>Green Grocer</a> on Learn.co and start learning to code for free.</p>
