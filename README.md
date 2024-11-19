@@ -104,7 +104,7 @@ Named parameters give you more expressive code since you are specifying what eac
 
 ## Resources
 
-* [Named Parameters](http://brainspec.com/blog/2012/10/08/keyword-arguments-ruby-2-0/)
+* [Named Parameters](https://robots.thoughtbot.com/ruby-2-keyword-arguments)
 
 ## Reward
 
