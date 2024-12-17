@@ -56,6 +56,9 @@ then the method should return the hash below:
 
 #### Write the `apply_coupons` Method
 
+Write an `apply_coupons` method that takes in a cart and an _Array_ of 
+coupons, applying the coupons _if_ appropriate.
+
 If the method is given a cart that looks like this:
 
 ```ruby
@@ -65,10 +68,10 @@ If the method is given a cart that looks like this:
 }
 ```
 
-and a coupon for avocados that looks like this:
+and an Array with a single coupon for avocados that looks like this:
 
 ```ruby
-{:item => "AVOCADO", :num => 2, :cost => 5.00}
+[{:item => "AVOCADO", :num => 2, :cost => 5.00}]
 ```
 
 then `apply_coupons` should return the following hash:
