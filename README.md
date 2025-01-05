@@ -100,15 +100,15 @@ This `checkout` method will rely on three other methods: `consolidate_cart`,
 Below find descriptions of each of the methods the tests will guide you to
 create.
 
-### Write the `find_item_by_name_in_collection`
+### Write the `find_item_by_name_in_collection` Method
 
 * Arguments:
   * `String`: name of the item to find
   * `Array`: a collection of items to search through
 * Returns:
   * `nil` if no match is found
-  * the matching `Hash` of a match between desired name a given `Hash`'s :item
-    key is found
+  * the matching `Hash` if a match is found between the desired name and a given 
+    `Hash`'s :item key
 
 ### Write the `consolidate_cart` Method
 
@@ -133,13 +133,13 @@ Given:
 ]
 ```
 
-then the method should return the hash below:
+then the method should return the array below:
 
 ```ruby
-{
-  "AVOCADO" => {:price => 3.00, :clearance => true, :count => 2},
-  "KALE"    => {:price => 3.00, :clearance => false, :count => 1}
-}
+[
+  {:item => "AVOCADO", :price => 3.00, :clearance => true, :count => 2},
+  {:item => "KALE", :price => 3.00, :clearance => false, :count => 1}
+]
 ```
 
 You'll be wanting to check in with tests often to make sure your method is on
@@ -208,7 +208,7 @@ price is listed as $2.50.
   * `Array`: a collection of item `Hash`es
 * Returns:
   * a ***new*** `Array` where every ***unique*** item in the original is present
-    *but* with its price reduced by 20% if it's `:clearance` values is `true`
+    *but* with its price reduced by 20% if its `:clearance` value is `true`
 
 This method should discount the price of every item on clearance by twenty
 percent.
@@ -235,9 +235,9 @@ it should update the cart with clearance applied to PEANUT BUTTER and SOY MILK:
 ]
 ```
 
-You'll need to use the `Float` class' built-in [round][round] method to be
-helpful here to make sure your values align. `2.4900923090909029304` becomes
-`2.5` if we use it like so: `2.4900923090909029304.round(2)`
+The `Float` class' built-in [round][round] method will be helpful here to make 
+sure your values align. `2.4900923090909029304` becomes `2.5` if we use it 
+like so: `2.4900923090909029304.round(2)`
 
 ### Write the `checkout` Method
 
