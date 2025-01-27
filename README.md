@@ -107,7 +107,7 @@ create.
   * `Array`: a collection of items to search through
 * Returns:
   * `nil` if no match is found
-  * the matching `Hash` if a match is found between the desired name and a given 
+  * the matching `Hash` if a match is found between the desired name and a given
     `Hash`'s :item key
 
 ### Write the `consolidate_cart` Method
@@ -235,8 +235,8 @@ it should update the cart with clearance applied to PEANUT BUTTER and SOY MILK:
 ]
 ```
 
-The `Float` class' built-in [round][round] method will be helpful here to make 
-sure your values align. `2.4900923090909029304` becomes `2.5` if we use it 
+The `Float` class' built-in [round][round] method will be helpful here to make
+sure your values align. `2.4900923090909029304` becomes `2.5` if we use it
 like so: `2.4900923090909029304.round(2)`
 
 ### Write the `checkout` Method
@@ -273,11 +273,17 @@ that lets us extract relevant insights that have meaning in the real world. The
 better we can structure our programs to represent people and the actions they
 need to perform, the easier we can make our programs necessary to users.
 
+## Video Walkthrough
+
+Try to solve this by yourself and give it your best, but if you 
+get stuck checkout this video walkthrough:
+
+<iframe width="640" height="480" src="https://www.youtube.com/watch?v=JAOL4dbtfLQ" frameborder="0" allowfullscreen></iframe>
+
 ## Resources
 
 - [round][round]
 - [Nested Data Structures to Insights](https://github.com/learn-co-curriculum/programming-univbasics-nds-nds-to-insights)
-
 [round]: https://ruby-doc.org/core-2.1.2/Float.html#method-i-round
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer'>Green Grocer</a> on Learn.co and start learning to code for free.</p>
