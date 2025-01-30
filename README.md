@@ -284,6 +284,7 @@ get stuck checkout this video walkthrough:
 
 - [round][round]
 - [Nested Data Structures to Insights](https://github.com/learn-co-curriculum/programming-univbasics-nds-nds-to-insights)
+
 [round]: https://ruby-doc.org/core-2.1.2/Float.html#method-i-round
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/green_grocer'>Green Grocer</a> on Learn.co and start learning to code for free.</p>
