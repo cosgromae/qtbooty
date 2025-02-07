@@ -282,7 +282,7 @@ get stuck checkout this video walkthrough:
 
 ## Resources
 
-- [round][round]
+- [Round][round]
 - [Nested Data Structures to Insights](https://github.com/learn-co-curriculum/programming-univbasics-nds-nds-to-insights)
 
 [round]: https://ruby-doc.org/core-2.1.2/Float.html#method-i-round
